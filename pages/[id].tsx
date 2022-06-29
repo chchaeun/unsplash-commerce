@@ -1,8 +1,7 @@
 import { useRouter } from "next/router";
 import { useQuery } from "react-query";
-import Nav from "./nav";
-import { likesAtom } from "./store/likesAtom";
-import { api } from "./utils/myApi";
+import { likesAtom } from "../store/likesAtom";
+import { api } from "../utils/myApi";
 import { useRecoilState } from "recoil";
 interface IDetail {
   id: string;
@@ -54,8 +53,7 @@ const Detail = () => {
   };
   return (
     <div>
-      <Nav />
-      {detail && (
+k      {detail && (
         <div className="product-detail-container">
           <div className="flex-col-center w-520">
             <img

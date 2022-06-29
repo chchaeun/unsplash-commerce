@@ -1,8 +1,7 @@
 import React from "react";
-import Nav from "./nav";
 import { useRouter } from "next/router";
 import { useRecoilValue } from "recoil";
-import { likesAtom } from "./store/likesAtom";
+import { likesAtom } from "../store/likesAtom";
 const Likes = () => {
   const router = useRouter();
   const likes = useRecoilValue(likesAtom);
@@ -11,7 +10,6 @@ const Likes = () => {
   };
   return (
     <div>
-      <Nav />
       {likes.length > 0 ? (
         <div className="product-info">
           찜 목록

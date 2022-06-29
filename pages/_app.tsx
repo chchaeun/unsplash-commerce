@@ -4,12 +4,15 @@ import "../styles/list.css";
 import "../styles/utils.css";
 import "../styles/nav.css";
 import { RecoilRoot } from "recoil";
+import Layout from "../components/layout/layout";
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = new QueryClient();
   return (
     <QueryClientProvider client={queryClient}>
       <RecoilRoot>
-        <Component {...pageProps} />
+        <Layout>
+          <Component {...pageProps} />
+        </Layout>
       </RecoilRoot>
     </QueryClientProvider>
   );

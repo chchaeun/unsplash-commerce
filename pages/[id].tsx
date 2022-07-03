@@ -3,6 +3,9 @@ import { useQuery } from "react-query";
 import { likesAtom } from "../store/likesAtom";
 import { api } from "../utils/myApi";
 import { useRecoilState } from "recoil";
+import { fetchPhotoById } from "./api/fetchPhotoById";
+import { fetchPhotos } from "./api/fetchPhotos";
+import { IPhoto } from ".";
 interface IDetail {
   id: string;
   likes: number;
@@ -14,14 +17,27 @@ interface IDetail {
     first_name: string;
   };
 }
-const Detail = () => {
+interface IParams {
+  params: {
+    id: string;
+  };
+}
+const Detail = (props: IDetail) => {
   const router = useRouter();
   const { id } = router.query;
 
   const [likes, setLikes] = useRecoilState(likesAtom);
-  const { data: detail } = useQuery<IDetail>(["photoDetail", id], async () => {
-    return await api.get(`/photos/${id}`).then((res) => res.data);
-  });
+
+  const { data: detail } = useQuery<IDetail>(
+    ["photoDetail", id],
+    async () => {
+      if (typeof id !== "string") {
+        return;
+      }
+      return await fetchPhotoById(id);
+    },
+    { initialData: props }
+  );
 
   const isLike = (id: string) => {
     for (let i = 0; i < likes.length; i++) {
@@ -51,9 +67,14 @@ const Detail = () => {
     }
     setLikes(newLikes);
   };
+
+  if (router.isFallback) {
+    return <div>Loading...</div>;
+  }
+
   return (
     <div>
-k      {detail && (
+      {detail && (
         <div className="product-detail-container">
           <div className="flex-col-center w-520">
             <img
@@ -88,4 +109,21 @@ k      {detail && (
     </div>
   );
 };
+
+export async function getStaticPaths() {
+  const data = await fetchPhotos(1);
+  const paths = data.data.map((value: IPhoto) => {
+    return { params: { id: value.id } };
+  });
+  return {
+    paths,
+    fallback: "blocking",
+  };
+}
+
+export async function getStaticProps({ params }: IParams) {
+  const data = await fetchPhotoById(params.id);
+  return { props: data };
+}
+
 export default Detail;

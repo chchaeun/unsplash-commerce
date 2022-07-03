@@ -2,7 +2,7 @@ import React from "react";
 import { useInfiniteQuery, useQuery } from "react-query";
 import { fetchPhotos } from "./api/fetchPhotos";
 import { useRouter } from "next/router";
-interface IPhoto {
+export interface IPhoto {
   id: string;
   likes: number;
   urls: {
